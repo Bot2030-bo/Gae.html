@@ -3,32 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ichancy👑 - سلوت الفواكه</title>
+    <title>Ichancy👑 - دولاب الحظ</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Tahoma', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0f1a, #0f1a2b);
+            background: linear-gradient(135deg, #0a0f1a, #0f1a2b, #0a0f1a);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
         .container {
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             background: linear-gradient(145deg, #0d1422, #0a0f1a);
             border-radius: 48px;
             padding: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.05);
             border: 1px solid rgba(255,215,0,0.25);
         }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 10px; }
-        .header h1 { color: #ffd700; font-size: 28px; text-shadow: 0 0 8px rgba(255,215,0,0.4); }
-        .header p { color: #ffd700; font-size: 11px; opacity: 0.7; }
-        .card { background: rgba(0,0,0,0.5); border-radius: 32px; padding: 20px; margin-bottom: 15px; }
-        input {
+
+        /* الهيدر */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .header h1 {
+            color: #ffd700;
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(255,215,0,0.4);
+        }
+
+        .header p {
+            color: #ffd700;
+            font-size: 11px;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        /* شاشة تسجيل الدخول */
+        .login-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 32px;
+            padding: 25px;
+            backdrop-filter: blur(4px);
+        }
+
+        .login-card input {
             width: 100%;
             padding: 14px;
             border-radius: 60px;
@@ -39,7 +74,14 @@
             text-align: center;
             margin-bottom: 12px;
         }
-        button {
+
+        .login-card input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.3);
+        }
+
+        .login-btn {
             background: linear-gradient(145deg, #ffd700, #e6a800);
             border: none;
             padding: 14px;
@@ -49,134 +91,450 @@
             font-size: 18px;
             color: #0a0f1a;
             cursor: pointer;
-            margin-bottom: 8px;
+            transition: 0.1s linear;
         }
-        button:active { transform: scale(0.97); }
-        .btn-danger { background: linear-gradient(145deg, #ff4444, #cc0000); color: white; }
-        .btn-success { background: linear-gradient(145deg, #00cc66, #009944); color: white; }
-        .balance-card { background: rgba(0,0,0,0.6); border-radius: 32px; padding: 15px; text-align: center; margin-bottom: 20px; }
-        .balance-amount { font-size: 42px; font-weight: bold; color: #ffd700; }
-        .info-text { font-size: 11px; color: #aaa; margin-top: 15px; text-align: center; }
-        .result-code { background: #0a0f1a; padding: 12px; border-radius: 20px; font-family: monospace; font-size: 18px; text-align: center; margin: 10px 0; color: #ffd700; }
-        .flex-btns { display: flex; gap: 10px; }
-        .flex-btns button { flex: 1; }
-        .reels { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
-        .reel { background: #03060a; width: 85px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 24px; font-size: 52px; border: 1px solid rgba(255,215,0,0.3); }
+
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* بطاقة الرصيد */
+        .balance-card {
+            background: linear-gradient(135deg, #0f1a2b, #0a0f1a);
+            border-radius: 32px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .balance-label {
+            color: #aaa;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+            line-height: 1.2;
+        }
+
+        .balance-note {
+            color: #ffaa33;
+            font-size: 11px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* خيارات الرهان */
+        .bet-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .bet-btn {
+            background: linear-gradient(145deg, #1e2a3a, #121a28);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 60px;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 8px rgba(0,0,0,0.3);
+            flex: 1;
+            min-width: 90px;
+        }
+
+        .bet-btn.active {
+            background: linear-gradient(145deg, #ffd700, #e6a800);
+            color: #0a0f1a;
+            transform: scale(0.97);
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+
+        /* منطقة الدولاب */
+        .wheel-container {
+            background: #070b12;
+            border-radius: 48px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 0 auto;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px #1a2a3a, 0 0 0 10px #0f1a2b, 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .pointer {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ffd700;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        .spin-btn {
+            background: linear-gradient(145deg, #ffd700, #e6a800);
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 60px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0a0f1a;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.1s linear;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+        }
+
+        .spin-btn:active {
+            transform: scale(0.97);
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* نتيجة اللعبة */
+        .result-area {
+            background: rgba(0,0,0,0.5);
+            border-radius: 28px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .win-message {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            min-height: 70px;
+            transition: all 0.3s ease;
+        }
+
+        .win-message.win {
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .win-message.lose {
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
+        .win-message.normal {
+            color: #ffd700;
+        }
+
+        .update-btn {
+            background: rgba(255,215,0,0.15);
+            border: 1px solid #ffd700;
+            padding: 12px;
+            border-radius: 60px;
+            color: #ffd700;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.1s;
+            margin-top: 10px;
+        }
+
+        .update-btn:active {
+            background: rgba(255,215,0,0.3);
+            transform: scale(0.98);
+        }
+
+        .info-note {
+            font-size: 11px;
+            color: #6c7687;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            background: rgba(255,68,68,0.2);
+            border: 1px solid #ff4444;
+            padding: 8px 15px;
+            border-radius: 30px;
+            color: #ff4444;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .username-display {
+            color: #ffd700;
+            font-size: 14px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+
+        /* تأثيرات */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.3s ease;
+        }
     </style>
 </head>
 <body>
 <div class="container" id="app">
-    <!-- شاشة تسجيل الدخول وإنشاء حساب -->
-    <div id="auth-screen">
-        <div class="header"><h1>👑 ICHANCY 👑</h1><p>سجل دخولك أو أنشئ حساباً</p></div>
-        <div class="card">
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen">
+        <div class="header">
+            <h1>🎡 ICHANCY WHEEL 🎡</h1>
+            <p>GOLDEN FORTUNE</p>
+        </div>
+        <div class="login-card">
             <input type="text" id="login-username" placeholder="اسم المستخدم">
             <input type="password" id="login-password" placeholder="كلمة المرور">
-            <button onclick="login()">🔓 دخول</button>
-            <hr style="margin: 15px; border-color:#ffd70033;">
-            <input type="text" id="register-username" placeholder="اسم مستخدم جديد">
-            <input type="password" id="register-password" placeholder="كلمة مرور جديدة">
-            <button onclick="register()">📝 إنشاء حساب جديد</button>
+            <button class="login-btn" onclick="login()">🚀 دخول إلى اللعبة</button>
+            <div class="info-note">
+                💡 ليس لديك حساب؟<br>
+                أنشئ حساباً مجاناً عبر البوت باستخدام الأمر <b>/ichancy</b>
+            </div>
         </div>
-        <div class="info-text">💡 أنشئ حساباً أولاً، ثم سجل دخولك لبدء اللعب</div>
     </div>
 
-    <!-- شاشة اللعبة (تظهر بعد تسجيل الدخول) -->
+    <!-- شاشة اللعبة -->
     <div id="game-screen" style="display: none;">
-        <div class="header"><h1>👑 ICHANCY SLOT 👑</h1><p>FRUIT MATCH</p></div>
-        
+        <div class="header">
+            <h1>🎡 ICHANCY WHEEL 🎡</h1>
+            <p>GOLDEN FORTUNE</p>
+        </div>
+
+        <div class="flex-between">
+            <div class="username-display" id="username-display"></div>
+            <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+        </div>
+
         <div class="balance-card">
+            <div class="balance-label">💰 رصيد ICHANCY</div>
             <div class="balance-amount" id="balance">0</div>
-            <div class="info-text">💰 رصيدك داخل اللعبة</div>
+            <div class="balance-note">✦ الرصيد المشحون من البوت ✦</div>
         </div>
 
-        <div class="flex-btns">
-            <button class="btn-success" onclick="transferToGame()">📥 شحن من البوت</button>
-            <button class="btn-danger" onclick="transferToBot()">📤 سحب إلى البوت</button>
+        <div class="bet-options">
+            <button class="bet-btn" onclick="selectBet(1000)">💎 ١٠٠٠</button>
+            <button class="bet-btn" onclick="selectBet(1500)">💎 ١٥٠٠</button>
+            <button class="bet-btn" onclick="selectBet(2500)">🔥 ٢٥٠٠</button>
         </div>
 
-        <div class="card">
-            <div class="reels">
-                <div class="reel" id="reel1">🍒</div>
-                <div class="reel" id="reel2">🍋</div>
-                <div class="reel" id="reel3">🍉</div>
+        <div class="wheel-container">
+            <div class="wheel-wrapper">
+                <div class="pointer"></div>
+                <canvas id="wheelCanvas" width="500" height="500"></canvas>
             </div>
-            
-            <div class="flex-btns" style="margin: 15px 0;">
-                <button onclick="setBet(1000)">💎 1000</button>
-                <button onclick="setBet(1500)">💎 1500</button>
-                <button onclick="setBet(25000)">🔥 25000</button>
-            </div>
-            
-            <button onclick="spin()">🎡 ابدأ اللعب 🎡</button>
+            <button class="spin-btn" id="spinBtn" onclick="spin()">🎡 أدر الدولاب 🎡</button>
         </div>
 
-        <div id="result-code" class="result-code">---</div>
-        <div class="info-text" id="win-message">✨ اختر رهانك وابدأ ✨</div>
-        <div class="info-text">
-            ℹ️ بعد كل لعبة، انسخ النتيجة وأرسلها إلى البوت
+        <div class="result-area">
+            <div class="win-message" id="winMessage">✨ اضغط على الزر لبدء اللعب ✨</div>
+            <button class="update-btn" onclick="refreshBalance()">🔄 تحديث الرصيد</button>
+            <div class="info-note">
+                🎯 كل رقم على الدولاب يمثل مبلغ الربح<br>
+                🎰 الرقم <b style="color:#ff4444">0</b> = خسارة الرهان<br>
+                💰 يتم خصم الرهان تلقائياً ثم إضافة الربح
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // --------------------- إعدادات اللعبة ---------------------
-    const FRUITS = ['🍒', '🍋', '🍉', '🍇', '🍎', '🍊', '👑'];
-    let currentUser = null;           // اسم المستخدم الحالي
-    let gameBalance = 0;              // رصيد اللعبة للمستخدم الحالي
-    let currentBet = 1000;            // الرهان الحالي
-    let lastResult = null;            // آخر نتيجة (WINxxx أو LOSExxx)
+    // =================== إعدادات API ===================
+    // ⚠️ غيّر هذا الرابط إلى رابط API الخاص بك (نغروك أو الخادم)
+    const API_BASE_URL = "https://YOUR_SERVER_URL";  // مثال: https://abc123.ngrok.io
     
-    const BOT_USERNAME = "YourBotUsername";  // ⚠️ غيّر إلى يوزر بوتك
-
-    // --------------------- دوال الحسابات (محلية) ---------------------
-    function getAccounts() {
-        const accounts = localStorage.getItem("ichancy_accounts");
-        return accounts ? JSON.parse(accounts) : {};
-    }
-
-    function saveAccounts(accounts) {
-        localStorage.setItem("ichancy_accounts", JSON.stringify(accounts));
-    }
-
-    function getUserData(username) {
-        const data = localStorage.getItem(`ichancy_user_${username}`);
-        return data ? JSON.parse(data) : { balance: 5000 };  // رصيد ابتدائي 5000
-    }
-
-    function saveUserData(username, data) {
-        localStorage.setItem(`ichancy_user_${username}`, JSON.stringify(data));
-    }
-
-    // تسجيل حساب جديد
-    function register() {
-        const username = document.getElementById('register-username').value.trim();
-        const password = document.getElementById('register-password').value.trim();
+    // =================== إعدادات الدولاب ===================
+    // أرقام الدولاب وقيم الجوائز
+    const WHEEL_SEGMENTS = [
+        { value: 0, label: "0", color: "#ff4444" },      // خسارة
+        { value: 500, label: "500", color: "#ffaa44" },  // ربح 500
+        { value: 1000, label: "1000", color: "#44ff88" }, // ربح 1000
+        { value: 0, label: "0", color: "#ff4444" },      // خسارة
+        { value: 2000, label: "2000", color: "#44ff88" }, // ربح 2000
+        { value: 500, label: "500", color: "#ffaa44" },   // ربح 500
+        { value: 0, label: "0", color: "#ff4444" },       // خسارة
+        { value: 5000, label: "5000", color: "#44ccff" }, // ربح 5000
+        { value: 1000, label: "1000", color: "#44ff88" }, // ربح 1000
+        { value: 0, label: "0", color: "#ff4444" },       // خسارة
+        { value: 1500, label: "1500", color: "#ffaa44" }, // ربح 1500
+        { value: 0, label: "0", color: "#ff4444" }        // خسارة
+    ];
+    
+    const SEGMENT_ANGLE = 360 / WHEEL_SEGMENTS.length;
+    
+    // =================== متغيرات اللعبة ===================
+    let currentUser = null;
+    let currentPassword = null;
+    let currentBalance = 0;
+    let selectedBet = 1000;
+    let isSpinning = false;
+    let currentWinAmount = 0;
+    
+    let canvas = document.getElementById('wheelCanvas');
+    let ctx = canvas.getContext('2d');
+    
+    // =================== رسم الدولاب ===================
+    function drawWheel() {
+        const size = 500;
+        canvas.width = size;
+        canvas.height = size;
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = size / 2 - 5;
         
-        if (!username || !password) {
-            alert("❌ الرجاء إدخال اسم مستخدم وكلمة مرور");
-            return;
+        for (let i = 0; i < WHEEL_SEGMENTS.length; i++) {
+            const startAngle = i * SEGMENT_ANGLE * Math.PI / 180;
+            const endAngle = (i + 1) * SEGMENT_ANGLE * Math.PI / 180;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.closePath();
+            
+            ctx.fillStyle = WHEEL_SEGMENTS[i].color;
+            ctx.fill();
+            ctx.strokeStyle = "#ffd700";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(startAngle + SEGMENT_ANGLE * Math.PI / 360);
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "bold 20px 'Tahoma'";
+            ctx.fillStyle = "#fff";
+            ctx.shadowBlur = 0;
+            ctx.fillText(WHEEL_SEGMENTS[i].label, radius * 0.7, 0);
+            ctx.restore();
         }
         
-        const accounts = getAccounts();
-        if (accounts[username]) {
-            alert("❌ اسم المستخدم موجود بالفعل!");
-            return;
+        // رسم الدائرة الداخلية
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
+        ctx.fillStyle = "#ffd700";
+        ctx.fill();
+        ctx.strokeStyle = "#0a0f1a";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        ctx.font = "bold 28px 'Tahoma'";
+        ctx.fillStyle = "#0a0f1a";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🎡", centerX, centerY);
+    }
+    
+    // =================== تدوير الدولاب ===================
+    let currentRotation = 0;
+    let animationFrame = null;
+    
+    function spinWheel(targetSegment, callback) {
+        if (isSpinning) return;
+        isSpinning = true;
+        
+        const spinBtn = document.getElementById('spinBtn');
+        spinBtn.disabled = true;
+        spinBtn.textContent = "🌀 يدور... 🌀";
+        
+        const targetIndex = targetSegment;
+        const targetAngle = (targetIndex * SEGMENT_ANGLE) + (SEGMENT_ANGLE / 2);
+        const currentAngle = currentRotation % 360;
+        let spins = 5 * 360;
+        let delta = (targetAngle - currentAngle + 360) % 360;
+        let totalDelta = spins + delta;
+        let startTime = null;
+        const duration = 2000;
+        
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            let progress = Math.min(1, elapsed / duration);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const newRotation = currentRotation + (totalDelta * easeOut);
+            currentRotation = newRotation % 360;
+            
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                isSpinning = false;
+                spinBtn.disabled = false;
+                spinBtn.textContent = "🎡 أدر الدولاب 🎡";
+                if (callback) callback();
+            }
         }
         
-        accounts[username] = password;
-        saveAccounts(accounts);
-        
-        // إنشاء بيانات المستخدم
-        saveUserData(username, { balance: 5000 });
-        
-        alert("✅ تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.");
-        document.getElementById('register-username').value = "";
-        document.getElementById('register-password').value = "";
+        requestAnimationFrame(animate);
     }
-
-    // تسجيل الدخول
-    function login() {
+    
+    // =================== دوال API ===================
+    async function callAPI(endpoint, method, data) {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const options = {
+            method: method,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        if (data) options.body = JSON.stringify(data);
+        
+        try {
+            const response = await fetch(url, options);
+            return await response.json();
+        } catch (error) {
+            console.error("API Error:", error);
+            return { success: false, error: "فشل الاتصال بالبوت" };
+        }
+    }
+    
+    async function login() {
         const username = document.getElementById('login-username').value.trim();
         const password = document.getElementById('login-password').value.trim();
         
@@ -185,143 +543,149 @@
             return;
         }
         
-        const accounts = getAccounts();
-        if (accounts[username] !== password) {
-            alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة");
-            return;
-        }
+        showLoading(true);
         
-        currentUser = username;
-        const userData = getUserData(username);
-        gameBalance = userData.balance;
+        const result = await callAPI('/api/ichancy/login', 'POST', { username, password });
         
-        updateBalanceUI();
-        
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('game-screen').style.display = 'block';
-        
-        alert(`✅ مرحباً ${username}! رصيدك الحالي: ${gameBalance.toLocaleString()} ل.س`);
-    }
-
-    // تحديث عرض الرصيد
-    function updateBalanceUI() {
-        document.getElementById('balance').innerText = gameBalance.toLocaleString();
-        // حفظ الرصيد تلقائياً
-        if (currentUser) {
-            const userData = getUserData(currentUser);
-            userData.balance = gameBalance;
-            saveUserData(currentUser, userData);
-        }
-    }
-
-    // --------------------- دوال الشحن والسحب (ترسل أوامر للبوت) ---------------------
-    function transferToGame() {
-        // المستخدم يطلب من البوت شحن الرصيد إلى اللعبة
-        const amount = prompt("💰 كم تريد شحن من البوت إلى اللعبة؟", "1000");
-        if (!amount || isNaN(amount) || parseInt(amount) <= 0) {
-            alert("❌ مبلغ غير صحيح");
-            return;
-        }
-        const result = `TRANSFERTOGAME${amount}`;
-        navigator.clipboard.writeText(result).then(() => {
-            alert(`✅ انسخ الأمر التالي وأرسله إلى البوت:\n\n${result}\n\nسيتم تحويل ${amount} ل.س إلى رصيد اللعبة`);
-        });
-    }
-
-    function transferToBot() {
-        const amount = prompt("💰 كم تريد سحب من اللعبة إلى البوت؟", "1000");
-        if (!amount || isNaN(amount) || parseInt(amount) <= 0) {
-            alert("❌ مبلغ غير صحيح");
-            return;
-        }
-        if (parseInt(amount) > gameBalance) {
-            alert(`❌ رصيدك غير كافٍ! رصيدك: ${gameBalance.toLocaleString()} ل.س`);
-            return;
-        }
-        const result = `TRANSFERTOBOT${amount}`;
-        navigator.clipboard.writeText(result).then(() => {
-            alert(`✅ انسخ الأمر التالي وأرسله إلى البوت:\n\n${result}\n\nسيتم سحب ${amount} ل.س من رصيد اللعبة`);
-        });
-    }
-
-    // --------------------- دوال اللعبة ---------------------
-    function setBet(amount) {
-        currentBet = amount;
-        document.getElementById('win-message').innerHTML = `💰 الرهان: ${amount.toLocaleString()} ل.س`;
-    }
-
-    function calculatePrize(bet, symbols) {
-        const [s1, s2, s3] = symbols;
-        const isTriple = (s1 === s2 && s2 === s3);
-        const isPair = (s1 === s2 || s2 === s3 || s1 === s3);
-        const crownCount = symbols.filter(s => s === '👑').length;
-        
-        let multiplier = 0;
-        if (isTriple) {
-            if (s1 === '👑') multiplier = 18;
-            else if (s1 === '🍒') multiplier = 6;
-            else if (s1 === '🍋') multiplier = 5;
-            else if (s1 === '🍉') multiplier = 7;
-            else if (s1 === '🍇') multiplier = 8;
-            else if (s1 === '🍎') multiplier = 6;
-            else if (s1 === '🍊') multiplier = 6;
-            else multiplier = 4;
-        } else if (isPair) {
-            multiplier = 2;
-        }
-        
-        let prize = bet * multiplier;
-        prize += crownCount * 400;
-        
-        const MAX_WIN = 80000;
-        if (prize > MAX_WIN) prize = MAX_WIN;
-        
-        return { prize, multiplier, isWin: prize > 0 };
-    }
-
-    function spin() {
-        if (!currentUser) {
-            alert("❌ الرجاء تسجيل الدخول أولاً");
-            return;
-        }
-        if (gameBalance < currentBet) {
-            alert(`❌ رصيدك غير كافٍ! تحتاج ${currentBet.toLocaleString()} ل.س`);
-            return;
-        }
-        
-        // خصم الرهان
-        gameBalance -= currentBet;
-        updateBalanceUI();
-        
-        // توليد رموز عشوائية
-        const symbols = [
-            FRUITS[Math.floor(Math.random() * FRUITS.length)],
-            FRUITS[Math.floor(Math.random() * FRUITS.length)],
-            FRUITS[Math.floor(Math.random() * FRUITS.length)]
-        ];
-        
-        // تحديث واجهة السلوت
-        document.getElementById('reel1').innerText = symbols[0];
-        document.getElementById('reel2').innerText = symbols[1];
-        document.getElementById('reel3').innerText = symbols[2];
-        
-        // حساب الربح
-        const { prize, multiplier, isWin } = calculatePrize(currentBet, symbols);
-        
-        if (isWin && prize > 0) {
-            gameBalance += prize;
-            lastResult = `WIN${prize}`;
-            document.getElementById('win-message').innerHTML = `🎉 فوز! +${prize.toLocaleString()} ل.س 🎉`;
-            document.getElementById('win-message').style.color = "#ffd700";
+        if (result.success) {
+            currentUser = username;
+            currentPassword = password;
+            currentBalance = result.balance;
+            
+            updateBalanceUI();
+            document.getElementById('username-display').innerHTML = `👑 ${username}`;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            drawWheel();
+            
+            showMessage(`✅ مرحباً ${username}!`, "normal");
         } else {
-            lastResult = `LOSE${currentBet}`;
-            document.getElementById('win-message').innerHTML = `😔 خسارة! -${currentBet.toLocaleString()} ل.س`;
-            document.getElementById('win-message').style.color = "#ff8888";
+            alert("❌ " + (result.error || "فشل تسجيل الدخول"));
         }
         
-        document.getElementById('result-code').innerHTML = lastResult;
-        updateBalanceUI();
+        showLoading(false);
     }
+    
+    function logout() {
+        currentUser = null;
+        currentPassword = null;
+        currentBalance = 0;
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'block';
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+    }
+    
+    async function refreshBalance() {
+        if (!currentUser) return;
+        
+        const result = await callAPI('/api/ichancy/balance', 'POST', {
+            username: currentUser,
+            password: currentPassword
+        });
+        
+        if (result.success) {
+            currentBalance = result.balance;
+            updateBalanceUI();
+            showMessage(`💰 تم تحديث الرصيد: ${currentBalance.toLocaleString()} ل.س`, "normal");
+        } else {
+            alert("❌ " + (result.error || "فشل تحديث الرصيد"));
+        }
+    }
+    
+    function selectBet(amount) {
+        selectedBet = amount;
+        document.querySelectorAll('.bet-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+    
+    async function spin() {
+        if (isSpinning) {
+            showMessage("⏳ الدولاب يدور، انتظر قليلاً", "normal");
+            return;
+        }
+        
+        if (currentBalance < selectedBet) {
+            showMessage(`❌ رصيدك غير كافٍ! تحتاج ${selectedBet.toLocaleString()} ل.س`, "lose");
+            return;
+        }
+        
+        // خصم الرهان فوراً
+        currentBalance -= selectedBet;
+        updateBalanceUI();
+        
+        // اختيار النتيجة العشوائية
+        const randomIndex = Math.floor(Math.random() * WHEEL_SEGMENTS.length);
+        const segment = WHEEL_SEGMENTS[randomIndex];
+        const winValue = segment.value;
+        
+        // تدوير الدولاب
+        spinWheel(randomIndex, async () => {
+            let winAmount = 0;
+            let message = "";
+            let resultType = "";
+            
+            if (winValue > 0) {
+                winAmount = winValue;
+                currentBalance += winAmount;
+                message = `🎉 فوز! ربحت ${winAmount.toLocaleString()} ل.س 🎉`;
+                resultType = "win";
+            } else {
+                winAmount = 0;
+                message = `😔 خسارة! الرقم 0، خسرت ${selectedBet.toLocaleString()} ل.س`;
+                resultType = "lose";
+            }
+            
+            updateBalanceUI();
+            showMessage(message, resultType);
+            
+            // تحديث الرصيد في API
+            const updateResult = await callAPI('/api/ichancy/update_balance', 'POST', {
+                username: currentUser,
+                password: currentPassword,
+                amount: winAmount - selectedBet
+            });
+            
+            if (updateResult.success) {
+                currentBalance = updateResult.new_balance;
+                updateBalanceUI();
+            } else {
+                // في حالة فشل API، نعيد تحديث الرصيد محلياً
+                await refreshBalance();
+            }
+        });
+    }
+    
+    function updateBalanceUI() {
+        const balanceSpan = document.getElementById('balance');
+        balanceSpan.innerText = currentBalance.toLocaleString();
+        balanceSpan.classList.add('pulse');
+        setTimeout(() => balanceSpan.classList.remove('pulse'), 300);
+    }
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('winMessage');
+        msgDiv.innerHTML = msg;
+        msgDiv.className = 'win-message ' + type;
+        
+        setTimeout(() => {
+            if (document.getElementById('winMessage').innerHTML === msg) {
+                msgDiv.className = 'win-message normal';
+            }
+        }, 3000);
+    }
+    
+    function showLoading(show) {
+        // يمكن إضافة مؤشر تحميل
+    }
+    
+    // تحديث الرصيد كل 30 ثانية
+    setInterval(() => {
+        if (currentUser) refreshBalance();
+    }, 30000);
+    
+    // رسم الدولاب عند التحميل
+    drawWheel();
 </script>
 </body>
-                                                           </html>
+</html>
