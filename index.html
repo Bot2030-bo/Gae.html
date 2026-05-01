@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ألعاب الويب - ربح حقيقي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* بطاقة تسجيل الدخول */
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        h1 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        button {
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-success {
+            background: #00ff88;
+            color: #1a1a2e;
+        }
+
+        /* شاشة اللعبة */
+        .game-screen {
+            display: none;
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #ffd700;
+        }
+
+        .balance-label {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .balance-amount {
+            color: #00ff88;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .game-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-btn {
+            flex: 1;
+            background: #0f3460;
+            color: white;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .game-btn.active {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+
+        .game-area {
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .dice-result {
+            font-size: 80px;
+            margin: 20px;
+        }
+
+        .slot-result {
+            font-size: 50px;
+            letter-spacing: 15px;
+            margin: 20px;
+        }
+
+        .wheel {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .bet-input {
+            margin: 15px 0;
+        }
+
+        .bet-input input {
+            width: 150px;
+            padding: 12px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .guess-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .guess-buttons button {
+            flex: 1;
+        }
+
+        .result-box {
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .result-code {
+            background: #000;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .win-text {
+            color: #00ff88;
+        }
+
+        .lose-text {
+            color: #ff4444;
+        }
+
+        .copy-btn {
+            background: #ffd700;
+            margin-top: 10px;
+        }
+
+        .info-text {
+            color: #aaa;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .telegram-link {
+            display: inline-block;
+            background: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        hr {
+            margin: 15px 0;
+            border-color: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen">
+        <div class="card">
+            <h1>🎮 ألعاب الويب 🎮</h1>
+            <div class="input-group">
+                <input type="text" id="session-code" placeholder="أدخل كود الجلسة" maxlength="6" style="text-transform:uppercase">
+            </div>
+            <button onclick="login()">🚀 دخول إلى الألعاب</button>
+            <div class="info-text">
+                💡 كيف تحصل على كود الجلسة؟<br>
+                أرسل <b>/play</b> أو اضغط <b>🌐 ألعاب الويب</b> في البوت
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة الألعاب -->
+    <div id="game-screen" class="game-screen">
+        <!-- الرصيد -->
+        <div class="balance-box">
+            <div class="balance-label">💰 رصيدك الحالي</div>
+            <div class="balance-amount" id="balance">0</div>
+            <div class="balance-label">⭐ المستوى: <span id="level">1</span></div>
+        </div>
+
+        <!-- اختيار اللعبة -->
+        <div class="game-options">
+            <button class="game-btn active" onclick="selectGame('dice')">🎲 لعبة النرد</button>
+            <button class="game-btn" onclick="selectGame('slots')">🎰 سلوت الفواكه</button>
+            <button class="game-btn" onclick="selectGame('wheel')">🎡 دولاب الحظ</button>
+        </div>
+
+        <!-- منطقة عرض اللعبة -->
+        <div class="game-area">
+            <div id="game-display">
+                <!-- محتوى اللعبة يتغير حسب الاختيار -->
+            </div>
+        </div>
+
+        <!-- نتيجة اللعبة -->
+        <div class="result-box">
+            <h2>📤 النتيجة (أرسلها إلى البوت)</h2>
+            <div id="result-code" class="result-code">---</div>
+            <button class="copy-btn" onclick="copyResult()">📋 نسخ النتيجة</button>
+            <div class="info-text">
+                ℹ️ بعد النسخ، أرسل النتيجة إلى البوت<br>
+                سيتم تحديث رصيدك تلقائياً
+            </div>
+            <hr>
+            <a href="#" id="bot-link" class="telegram-link" target="_blank">📱 اضغط لفتح البوت</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================== المتغيرات ==================
+    let sessionCode = null;
+    let currentBalance = 5000;
+    let currentGame = 'dice';
+    let currentGuess = null;
+    let lastResult = null;
+    let betAmount = 1000;
+
+    // رابط البوت (استبدله بيوزر بوتك)
+    const BOT_USERNAME = "YourBotUsername";  // ⚠️ غير هذا!
+
+    // ================== دوال تسجيل الدخول ==================
+    function login() {
+        sessionCode = document.getElementById('session-code').value.toUpperCase().trim();
+
+        if (!sessionCode || sessionCode.length !== 6) {
+            alert('❌ الرجاء إدخال كود جلسة صحيح (6 أحرف)');
+            return;
+        }
+
+        // إظهار شاشة اللعبة
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
+
+        // تحديث رابط البوت
+        document.getElementById('bot-link').href = `https://t.me/${BOT_USERNAME}`;
+
+        // عرض الرسالة الترحيبية
+        alert(`✅ تم تسجيل الدخول بنجاح!\n🔐 كود الجلسة: ${sessionCode}\n\nيمكنك الآن اللعب، وبعد كل لعبة انسخ النتيجة وأرسلها إلى البوت`);
+
+        // بدء اللعبة الافتراضية
+        selectGame('dice');
+    }
+
+    // ================== اختيار اللعبة ==================
+    function selectGame(game) {
+        currentGame = game;
+
+        // تغيير لون الأزرار
+        document.querySelectorAll('.game-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // عرض واجهة اللعبة
+        const display = document.getElementById('game-display');
+
+        if (game === 'dice') {
+            display.innerHTML = `
+                <div class="bet-input">
+                    <input type="number" id="bet-amount" placeholder="مبلغ الرهان" value="1000" min="100">
+                </div>
+                <div class="dice-result" id="dice">🎲</div>
+                <div class="guess-buttons">
+                    <button onclick="setGuess('high')" id="btn-high" style="background:#00ff88;">🔺 كبير (4-6)</button>
+                    <button onclick="setGuess('low')" id="btn-low" style="background:#ff4444;">🔻 صغير (1-3)</button>
+                </div>
+                <button onclick="playDice()" style="background:#ffd700;">🎲 العب الآن 🎲</button>
+            `;
+            currentGuess = null;
+        }
+        else if (game === 'slots') {
+            display.innerHTML = `
+                <div class="bet-input">
+                    <input type="number" id="bet-amount" placeholder="مبلغ الرهان" value="1000" min="100">
+                </div>
+                <div class="slot-result" id="slots">🍒 🍋 🍉</div>
+                <button onclick="playSlots()" style="background:#ffd700;">🎰 ابدأ السلوت 🎰</button>
+            `;
+        }
+        else if (game === 'wheel') {
+            display.innerHTML = `
+                <div class="bet-input">
+                    <input type="number" id="bet-amount" placeholder="مبلغ الرهان" value="1000" min="100">
+                </div>
+                <div class="wheel" id="wheel">🎡</div>
+                <div id="wheel-number" style="font-size:30px;">?</div>
+                <button onclick="playWheel()" style="background:#ffd700;">🎡 أدر الدولاب 🎡</button>
+            `;
+        }
+    }
+
+    // ================== تخمين كبير/صغير ==================
+    function setGuess(choice) {
+        currentGuess = choice;
+        const btnHigh = document.getElementById('btn-high');
+        const btnLow = document.getElementById('btn-low');
+
+        if (choice === 'high') {
+            btnHigh.style.opacity = '0.6';
+            btnLow.style.opacity = '1';
+        } else {
+            btnLow.style.opacity = '0.6';
+            btnHigh.style.opacity = '1';
+        }
+    }
+
+    // ================== لعبة النرد ==================
+    function playDice() {
+        if (!currentGuess) {
+            alert('⚠️ اختر أولاً: كبير أم صغير');
+            return;
+        }
+
+        betAmount = parseInt(document.getElementById('bet-amount').value);
+        if (isNaN(betAmount) || betAmount < 100) {
+            alert('⚠️ الرهان يجب أن يكون 100 على الأقل');
+            return;
+        }
+
+        const dice = Math.floor(Math.random() * 6) + 1;
+        const diceEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        document.getElementById('dice').innerHTML = diceEmojis[dice-1] + ' ' + dice;
+
+        const isHigh = dice >= 4;
+        const won = (currentGuess === 'high' && isHigh) || (currentGuess === 'low' && !isHigh);
+
+        if (won) {
+            const winAmount = betAmount;
+            lastResult = `WIN${winAmount}`;
+            showResult('dice', `🎉 فوز! الرقم ${dice} كان ${isHigh ? 'كبيراً' : 'صغيراً'} 🎉`, winAmount, true);
+        } else {
+            lastResult = `LOSE${betAmount}`;
+            showResult('dice', `😔 خسارة! الرقم ${dice} كان ${isHigh ? 'كبيراً' : 'صغيراً'}`, betAmount, false);
+        }
+    }
+
+    // ================== لعبة السلوت ==================
+    function playSlots() {
+        betAmount = parseInt(document.getElementById('bet-amount').value);
+        if (isNaN(betAmount) || betAmount < 100) {
+            alert('⚠️ الرهان يجب أن يكون 100 على الأقل');
+            return;
+        }
+
+        const fruits = ['🍒', '🍋', '🍉', '🍇', '🍎', '🍊'];
+        const slot1 = fruits[Math.floor(Math.random() * fruits.length)];
+        const slot2 = fruits[Math.floor(Math.random() * fruits.length)];
+        const slot3 = fruits[Math.floor(Math.random() * fruits.length)];
+
+        document.getElementById('slots').innerHTML = `${slot1} ${slot2} ${slot3}`;
+
+        const won = (slot1 === slot2 && slot2 === slot3);
+
+        if (won) {
+            const winAmount = betAmount * 5;
+            lastResult = `WIN${winAmount}`;
+            showResult('slots', `🎉 جائزة كبرى! ثلاثة ${slot1} متتالية 🎉`, winAmount, true);
+        } else {
+            lastResult = `LOSE${betAmount}`;
+            showResult('slots', `😔 لا للأسف... جرب مرة أخرى`, betAmount, false);
+        }
+    }
+
+    // ================== لعبة دولاب الحظ ==================
+    function playWheel() {
+        betAmount = parseInt(document.getElementById('bet-amount').value);
+        if (isNaN(betAmount) || betAmount < 100) {
+            alert('⚠️ الرهان يجب أن يكون 100 على الأقل');
+            return;
+        }
+
+        const number = Math.floor(Math.random() * 12) + 1;
+        document.getElementById('wheel-number').innerHTML = `🎡 الرقم: ${number} 🎡`;
+
+        // فوز إذا كان الرقم فردياً
+        const won = (number % 2 === 1);
+
+        if (won) {
+            const winAmount = betAmount * 2;
+            lastResult = `WIN${winAmount}`;
+            showResult('wheel', `🎉 فوز! الرقم ${number} (فردي) 🎉`, winAmount, true);
+        } else {
+            lastResult = `LOSE${betAmount}`;
+            showResult('wheel', `😔 خسارة! الرقم ${number} (زوجي)`, betAmount, false);
+        }
+    }
+
+    // ================== عرض النتيجة ==================
+    function showResult(game, message, amount, isWin) {
+        // إظهار النتيجة في الكود
+        document.getElementById('result-code').innerHTML = lastResult;
+
+        // إظهار رسالة منبثقة
+        const display = document.getElementById('game-display');
+        const resultDiv = document.createElement('div');
+        resultDiv.style.marginTop = '15px';
+        resultDiv.style.padding = '10px';
+        resultDiv.style.borderRadius = '10px';
+        resultDiv.style.fontWeight = 'bold';
+        resultDiv.style.backgroundColor = isWin ? 'rgba(0,255,0,0.2)' : 'rgba(255,0,0,0.2)';
+        resultDiv.style.color = isWin ? '#0f0' : '#f00';
+        resultDiv.innerHTML = message;
+
+        // إزالة أي رسالة سابقة
+        const oldResult = display.querySelector('.temp-result');
+        if (oldResult) oldResult.remove();
+
+        resultDiv.classList.add('temp-result');
+        display.appendChild(resultDiv);
+
+        // إعادة تعيين التخمين
+        if (game === 'dice') {
+            currentGuess = null;
+            const btnHigh = document.getElementById('btn-high');
+            const btnLow = document.getElementById('btn-low');
+            if (btnHigh) btnHigh.style.opacity = '1';
+            if (btnLow) btnLow.style.opacity = '1';
+        }
+    }
+
+    // ================== نسخ النتيجة ==================
+    function copyResult() {
+        if (!lastResult) {
+            alert('⚠️ لم تلعب بعد! العب أولاً ثم انسخ النتيجة');
+            return;
+        }
+
+        navigator.clipboard.writeText(lastResult).then(() => {
+            alert(`✅ تم نسخ: ${lastResult}\n\n📤 أرسله الآن إلى البوت @${BOT_USERNAME}`);
+        }).catch(() => {
+            alert(`📋 انسخ يدوياً: ${lastResult}\nوأرسله إلى البوت @${BOT_USERNAME}`);
+        });
+    }
+</script>
+</body>
+</html>
