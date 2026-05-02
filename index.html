@@ -33,7 +33,6 @@
             border: 1px solid rgba(255,215,0,0.25);
         }
 
-        /* الهيدر */
         .header {
             text-align: center;
             margin-bottom: 20px;
@@ -55,27 +54,29 @@
             letter-spacing: 1px;
         }
 
-        /* شاشة تسجيل الدخول */
-        .login-card {
+        .code-card {
             background: rgba(0,0,0,0.5);
             border-radius: 32px;
             padding: 25px;
             backdrop-filter: blur(4px);
         }
 
-        .login-card input {
+        .code-card input {
             width: 100%;
             padding: 14px;
             border-radius: 60px;
             background: #111a24;
             border: 1px solid #ffd70055;
             color: #ffd700;
-            font-size: 16px;
+            font-size: 18px;
             text-align: center;
+            letter-spacing: 2px;
             margin-bottom: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        .login-card input:focus {
+        .code-card input:focus {
             outline: none;
             border-color: #ffd700;
             box-shadow: 0 0 10px rgba(255,215,0,0.3);
@@ -98,7 +99,6 @@
             transform: scale(0.97);
         }
 
-        /* بطاقة الرصيد */
         .balance-card {
             background: linear-gradient(135deg, #0f1a2b, #0a0f1a);
             border-radius: 32px;
@@ -130,7 +130,6 @@
             opacity: 0.9;
         }
 
-        /* خيارات الرهان */
         .bet-options {
             display: flex;
             gap: 12px;
@@ -161,7 +160,6 @@
             box-shadow: 0 0 15px rgba(255,215,0,0.5);
         }
 
-        /* منطقة الدولاب */
         .wheel-container {
             background: #070b12;
             border-radius: 48px;
@@ -227,7 +225,6 @@
             cursor: not-allowed;
         }
 
-        /* نتيجة اللعبة */
         .result-area {
             background: rgba(0,0,0,0.5);
             border-radius: 28px;
@@ -302,15 +299,27 @@
             margin-bottom: 10px;
         }
 
-        .username-display {
+        .code-display {
             color: #ffd700;
             font-size: 14px;
             background: rgba(0,0,0,0.5);
             padding: 5px 12px;
             border-radius: 30px;
+            font-family: monospace;
+            letter-spacing: 1px;
         }
 
-        /* تأثيرات */
+        .alert {
+            background: rgba(255,68,68,0.2);
+            border: 1px solid #ff4444;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 15px;
+            color: #ff8888;
+            font-size: 13px;
+            text-align: center;
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -324,24 +333,24 @@
 </head>
 <body>
 <div class="container" id="app">
-    <!-- شاشة تسجيل الدخول -->
     <div id="login-screen">
         <div class="header">
             <h1>🎡 ICHANCY WHEEL 🎡</h1>
             <p>GOLDEN FORTUNE</p>
         </div>
-        <div class="login-card">
-            <input type="text" id="login-username" placeholder="اسم المستخدم">
-            <input type="password" id="login-password" placeholder="كلمة المرور">
-            <button class="login-btn" onclick="login()">🚀 دخول إلى اللعبة</button>
+        <div class="code-card">
+            <input type="text" id="session-code" placeholder="أدخل كود الجلسة" maxlength="6" style="text-transform: uppercase;">
+            <button class="login-btn" onclick="connectWithCode()">🔐 الدخول بالكود</button>
             <div class="info-note">
-                💡 ليس لديك حساب؟<br>
-                أنشئ حساباً مجاناً عبر البوت باستخدام الأمر <b>/ichancy</b>
+                💡 <b>كيف تحصل على كود الجلسة؟</b><br>
+                • اذهب إلى بوت <b>@Ichancy990_bot</b><br>
+                • اضغط على زر <b>👑 ICHANCY 👑</b><br>
+                • سيتم إنشاء كود خاص بك<br>
+                • انسخ الكود وأدخله هنا
             </div>
         </div>
     </div>
 
-    <!-- شاشة اللعبة -->
     <div id="game-screen" style="display: none;">
         <div class="header">
             <h1>🎡 ICHANCY WHEEL 🎡</h1>
@@ -349,7 +358,7 @@
         </div>
 
         <div class="flex-between">
-            <div class="username-display" id="username-display"></div>
+            <div class="code-display" id="code-display"></div>
             <button class="logout-btn" onclick="logout()">🚪 خروج</button>
         </div>
 
@@ -386,41 +395,50 @@
 </div>
 
 <script>
-    // =================== إعدادات API ===================
-    // ⚠️ غيّر هذا الرابط إلى رابط API الخاص بك (نغروك أو الخادم)
-    const API_BASE_URL = "https://Botsy.pythonanywhere.com";  // مثال: https://abc123.ngrok.io
-    
-    // =================== إعدادات الدولاب ===================
-    // أرقام الدولاب وقيم الجوائز
     const WHEEL_SEGMENTS = [
-        { value: 0, label: "0", color: "#ff4444" },      // خسارة
-        { value: 500, label: "500", color: "#ffaa44" },  // ربح 500
-        { value: 1000, label: "1000", color: "#44ff88" }, // ربح 1000
-        { value: 0, label: "0", color: "#ff4444" },      // خسارة
-        { value: 2000, label: "2000", color: "#44ff88" }, // ربح 2000
-        { value: 500, label: "500", color: "#ffaa44" },   // ربح 500
-        { value: 0, label: "0", color: "#ff4444" },       // خسارة
-        { value: 5000, label: "5000", color: "#44ccff" }, // ربح 5000
-        { value: 1000, label: "1000", color: "#44ff88" }, // ربح 1000
-        { value: 0, label: "0", color: "#ff4444" },       // خسارة
-        { value: 1500, label: "1500", color: "#ffaa44" }, // ربح 1500
-        { value: 0, label: "0", color: "#ff4444" }        // خسارة
+        { value: 0, label: "0", color: "#ff4444" },
+        { value: 500, label: "500", color: "#ffaa44" },
+        { value: 1000, label: "1000", color: "#44ff88" },
+        { value: 0, label: "0", color: "#ff4444" },
+        { value: 2000, label: "2000", color: "#44ff88" },
+        { value: 500, label: "500", color: "#ffaa44" },
+        { value: 0, label: "0", color: "#ff4444" },
+        { value: 5000, label: "5000", color: "#44ccff" },
+        { value: 1000, label: "1000", color: "#44ff88" },
+        { value: 0, label: "0", color: "#ff4444" },
+        { value: 1500, label: "1500", color: "#ffaa44" },
+        { value: 0, label: "0", color: "#ff4444" }
     ];
     
     const SEGMENT_ANGLE = 360 / WHEEL_SEGMENTS.length;
     
-    // =================== متغيرات اللعبة ===================
-    let currentUser = null;
-    let currentPassword = null;
+    let currentSessionCode = null;
     let currentBalance = 0;
     let selectedBet = 1000;
     let isSpinning = false;
-    let currentWinAmount = 0;
+    let currentRotation = 0;
     
     let canvas = document.getElementById('wheelCanvas');
     let ctx = canvas.getContext('2d');
     
-    // =================== رسم الدولاب ===================
+    function getSessionData(code) {
+        const sessions = JSON.parse(localStorage.getItem('ichancy_sessions') || '{}');
+        return sessions[code] || { balance: 0, createdAt: Date.now() };
+    }
+    
+    function saveSessionData(code, data) {
+        const sessions = JSON.parse(localStorage.getItem('ichancy_sessions') || '{}');
+        sessions[code] = data;
+        localStorage.setItem('ichancy_sessions', JSON.stringify(sessions));
+    }
+    
+    function updateSessionBalance(code, newBalance) {
+        const session = getSessionData(code);
+        session.balance = newBalance;
+        session.lastUpdated = Date.now();
+        saveSessionData(code, session);
+    }
+    
     function drawWheel() {
         const size = 500;
         canvas.width = size;
@@ -456,7 +474,6 @@
             ctx.restore();
         }
         
-        // رسم الدائرة الداخلية
         ctx.beginPath();
         ctx.arc(centerX, centerY, 40, 0, 2 * Math.PI);
         ctx.fillStyle = "#ffd700";
@@ -471,10 +488,6 @@
         ctx.textBaseline = "middle";
         ctx.fillText("🎡", centerX, centerY);
     }
-    
-    // =================== تدوير الدولاب ===================
-    let currentRotation = 0;
-    let animationFrame = null;
     
     function spinWheel(targetSegment, callback) {
         if (isSpinning) return;
@@ -516,81 +529,53 @@
         requestAnimationFrame(animate);
     }
     
-    // =================== دوال API ===================
-    async function callAPI(endpoint, method, data) {
-        const url = `${API_BASE_URL}${endpoint}`;
-        const options = {
-            method: method,
-            headers: { 'Content-Type': 'application/json' }
-        };
-        if (data) options.body = JSON.stringify(data);
+    function connectWithCode() {
+        const code = document.getElementById('session-code').value.trim().toUpperCase();
         
-        try {
-            const response = await fetch(url, options);
-            return await response.json();
-        } catch (error) {
-            console.error("API Error:", error);
-            return { success: false, error: "فشل الاتصال بالبوت" };
-        }
-    }
-    
-    async function login() {
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-        
-        if (!username || !password) {
-            alert("❌ الرجاء إدخال اسم المستخدم وكلمة المرور");
+        if (!code) {
+            showAlert("❌ الرجاء إدخال كود الجلسة");
             return;
         }
         
-        showLoading(true);
-        
-        const result = await callAPI('/api/ichancy/login', 'POST', { username, password });
-        
-        if (result.success) {
-            currentUser = username;
-            currentPassword = password;
-            currentBalance = result.balance;
-            
-            updateBalanceUI();
-            document.getElementById('username-display').innerHTML = `👑 ${username}`;
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            drawWheel();
-            
-            showMessage(`✅ مرحباً ${username}!`, "normal");
-        } else {
-            alert("❌ " + (result.error || "فشل تسجيل الدخول"));
+        if (code.length !== 6) {
+            showAlert("❌ الكود يجب أن يكون مكون من 6 أحرف/أرقام");
+            return;
         }
         
-        showLoading(false);
+        const codePattern = /^[A-Z0-9]{6}$/;
+        if (!codePattern.test(code)) {
+            showAlert("❌ كود غير صالح!");
+            return;
+        }
+        
+        const sessionData = getSessionData(code);
+        currentSessionCode = code;
+        currentBalance = sessionData.balance;
+        
+        document.getElementById('code-display').innerHTML = `🔐 ${code}`;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
+        
+        updateBalanceUI();
+        drawWheel();
+        
+        showMessage(`✅ تم الدخول بنجاح! كود: ${code}`, "normal");
     }
     
     function logout() {
-        currentUser = null;
-        currentPassword = null;
+        currentSessionCode = null;
         currentBalance = 0;
         document.getElementById('game-screen').style.display = 'none';
         document.getElementById('login-screen').style.display = 'block';
-        document.getElementById('login-username').value = '';
-        document.getElementById('login-password').value = '';
+        document.getElementById('session-code').value = '';
     }
     
-    async function refreshBalance() {
-        if (!currentUser) return;
-        
-        const result = await callAPI('/api/ichancy/balance', 'POST', {
-            username: currentUser,
-            password: currentPassword
-        });
-        
-        if (result.success) {
-            currentBalance = result.balance;
-            updateBalanceUI();
-            showMessage(`💰 تم تحديث الرصيد: ${currentBalance.toLocaleString()} ل.س`, "normal");
-        } else {
-            alert("❌ " + (result.error || "فشل تحديث الرصيد"));
-        }
+    function refreshBalance() {
+        if (!currentSessionCode) return;
+        const sessionData = getSessionData(currentSessionCode);
+        currentBalance = sessionData.balance;
+        updateBalanceUI();
+        showMessage(`💰 تم تحديث الرصيد: ${currentBalance.toLocaleString()} ل.س`, "normal");
     }
     
     function selectBet(amount) {
@@ -599,7 +584,7 @@
         event.target.classList.add('active');
     }
     
-    async function spin() {
+    function spin() {
         if (isSpinning) {
             showMessage("⏳ الدولاب يدور، انتظر قليلاً", "normal");
             return;
@@ -610,49 +595,23 @@
             return;
         }
         
-        // خصم الرهان فوراً
         currentBalance -= selectedBet;
         updateBalanceUI();
+        updateSessionBalance(currentSessionCode, currentBalance);
         
-        // اختيار النتيجة العشوائية
         const randomIndex = Math.floor(Math.random() * WHEEL_SEGMENTS.length);
         const segment = WHEEL_SEGMENTS[randomIndex];
         const winValue = segment.value;
         
-        // تدوير الدولاب
-        spinWheel(randomIndex, async () => {
-            let winAmount = 0;
-            let message = "";
-            let resultType = "";
-            
+        spinWheel(randomIndex, () => {
             if (winValue > 0) {
-                winAmount = winValue;
-                currentBalance += winAmount;
-                message = `🎉 فوز! ربحت ${winAmount.toLocaleString()} ل.س 🎉`;
-                resultType = "win";
+                currentBalance += winValue;
+                showMessage(`🎉 فوز! ربحت ${winValue.toLocaleString()} ل.س 🎉`, "win");
             } else {
-                winAmount = 0;
-                message = `😔 خسارة! الرقم 0، خسرت ${selectedBet.toLocaleString()} ل.س`;
-                resultType = "lose";
+                showMessage(`😔 خسارة! الرقم 0، خسرت ${selectedBet.toLocaleString()} ل.س`, "lose");
             }
-            
             updateBalanceUI();
-            showMessage(message, resultType);
-            
-            // تحديث الرصيد في API
-            const updateResult = await callAPI('/api/ichancy/update_balance', 'POST', {
-                username: currentUser,
-                password: currentPassword,
-                amount: winAmount - selectedBet
-            });
-            
-            if (updateResult.success) {
-                currentBalance = updateResult.new_balance;
-                updateBalanceUI();
-            } else {
-                // في حالة فشل API، نعيد تحديث الرصيد محلياً
-                await refreshBalance();
-            }
+            updateSessionBalance(currentSessionCode, currentBalance);
         });
     }
     
@@ -667,7 +626,6 @@
         const msgDiv = document.getElementById('winMessage');
         msgDiv.innerHTML = msg;
         msgDiv.className = 'win-message ' + type;
-        
         setTimeout(() => {
             if (document.getElementById('winMessage').innerHTML === msg) {
                 msgDiv.className = 'win-message normal';
@@ -675,17 +633,51 @@
         }, 3000);
     }
     
-    function showLoading(show) {
-        // يمكن إضافة مؤشر تحميل
+    function showAlert(msg) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert';
+        alertDiv.innerHTML = msg;
+        const loginScreen = document.getElementById('login-screen');
+        const existingAlert = loginScreen.querySelector('.alert');
+        if (existingAlert) existingAlert.remove();
+        loginScreen.insertBefore(alertDiv, loginScreen.firstChild.nextSibling);
+        setTimeout(() => alertDiv.remove(), 3000);
     }
     
-    // تحديث الرصيد كل 30 ثانية
+    // استقبال الكود من الرابط تلقائياً
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeFromUrl = urlParams.get('code');
+    if (codeFromUrl && codeFromUrl.length === 6) {
+        document.getElementById('session-code').value = codeFromUrl;
+        setTimeout(() => connectWithCode(), 500);
+    }
+    
     setInterval(() => {
-        if (currentUser) refreshBalance();
+        if (currentSessionCode) refreshBalance();
     }, 30000);
     
-    // رسم الدولاب عند التحميل
     drawWheel();
+    
+    // دوال للبوت
+    window.createNewSessionCode = function() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    };
+    
+    window.chargeSessionCode = function(code, amount) {
+        const sessionData = getSessionData(code);
+        sessionData.balance += amount;
+        saveSessionData(code, sessionData);
+        return sessionData.balance;
+    };
+    
+    window.getSessionCodeBalance = function(code) {
+        return getSessionData(code).balance;
+    };
 </script>
 </body>
-</html>
+                </html>
